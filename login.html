@@ -1,0 +1,13 @@
+<div id="loginScreen">
+	<div id="loginForm">
+    	<h1>Luke's UMS</h1>
+        <form novalidate>
+            <p>Name: </p>
+            <p><input ng-model="ctrl.loginName" /></p>
+            <p>Password: </p>
+            <p><input ng-model="ctrl.passWord" /></p>
+            <p><span ng-show="ctrl.showWarning" class="warningClass">Geen geldige login combinatie</span></p>
+            <p><input type="submit" ng-click="ctrl.submitLogin()" value="Log in"</p>
+        </form>
+	</div>
+</div>

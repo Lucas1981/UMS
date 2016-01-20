@@ -1,0 +1,14 @@
+<h2>Alle users</h2>
+<p><button type="button" class="btn btn-primary" ng-click="go('/adduser')">Voeg user toe</button></p>
+<table id="userTable">
+	<tr class="tableHeader">
+    	<td>Naam</td>
+        <td>Leeftijd</td>
+        <td>Geslacht</td>
+    </tr>
+	<tr ng-repeat="user in ctrl.users">
+    	<td><a href="#/user/{{$index}}">{{user.naam}}</a></td>
+        <td>{{user.leeftijd}}</td>
+        <td>{{user.geslacht}}</td>
+    </tr>
+</table>

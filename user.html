@@ -1,0 +1,6 @@
+<h2>Details voor user</h2>
+<p>Naam: {{ctrl.users[userCtrl.userId].naam}}</p>
+<p>Leeftijd: {{ctrl.users[userCtrl.userId].leeftijd}}</p>
+<p>Geslacht: {{ctrl.users[userCtrl.userId].geslacht}}</p>
+<p>Lievelingsdier: {{ctrl.users[userCtrl.userId].lievelingsdier}}</p>
+<p><button type="button" class="btn btn-primary" ng-click="go('/edituser/' + userCtrl.userId)">Pas user aan</button></p>

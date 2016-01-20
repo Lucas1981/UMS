@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+<head>
+
+<!-- Get bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Get angular and the router extension -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
+
+<style>
+
+body{
+	padding:0;
+	margin:0;
+	border:0;
+	position:absolute;
+	width:100%;
+	height:100%;
+}
+
+#header{
+	position:relative;
+	width:100%;
+	height:10%;
+	background:black;
+	color:white;
+	float:left;
+}
+
+#header a{
+	color:white;
+	text-decoration:none;
+}
+
+#logout{
+	float:right;
+}
+
+#sidebar{
+	position:relative;
+	left:0;
+	width:10%;
+	height:80%;
+	background:grey;
+	color:white;
+	float:left;
+	padding-top:20px;
+}
+
+#nav ul{
+	padding-top:15px;
+}
+
+#nav ul li{
+	list-style-type: none;
+}
+
+#nav ul li a{
+	color:white;
+	text-decoration: none;
+}
+
+#nav ul li a:hover{
+	text-decoration: underline;
+}
+
+#main{
+	position:relative;
+	background:white;
+	color:black;
+	height:80%;
+	width:90%;
+	float:left;
+	padding:20px;
+}
+
+#footer{
+	position:relative;
+	width:100%;
+	color:white;
+	background:black;
+	height:10%;
+	float:left;
+}
+
+#loginScreen{
+	width:100%;
+	height:100%;
+	background:lightblue;
+	color:white;
+	position:absolute;
+	z-index:2;
+}
+
+#loginForm{
+	width:320px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:10%;
+	padding:20px;
+	background:grey;
+	border-radius:5px;
+	position:relative;
+}
+
+#loginScreen button, #loginScreen input{
+	color:black;
+}
+
+table{
+	border-collapse: collapse;
+}
+
+#userTable tr td{
+	border-size:1px;
+	border-style:solid;
+	border-color:black;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.tableHeader td{
+	font-weight:bold;
+	background:lightblue;
+}
+
+#userTable tr:nth-child(odd){
+	background:#FFFCDF;
+}
+
+.floatRight{
+	float:right;
+}
+
+.warningClass{
+	color:white;
+}
+
+.active{
+	font-weight:bold;
+}
+
+</style>
+
+<meta charset="utf-8">
+<title>Luke's UMS</title>
+</head>
+
+<body ng-app="routingApp" ng-controller="myCtrl as ctrl">
+
+<!-- Check if user is logged in. If not, throw a login screen -->
+<div ng-hide="true"> <!-- "ctrl.userLoggedIn"> -->
+    <login-screen>
+    </login-screen>
+</div>
+
+<!-- If user is logged in, show the normal site -->
+<div id="header">
+    <a href="#/">Luke's UMS</a>
+    <a href class="floatRight" ng-click="ctrl.userLogout()">Log out</a>
+</div>
+
+<div id="sidebar">
+    <div id="nav">
+        <ul>
+            <li><a href="#/users">Users</a></li>
+            <li><a href="#/view2">View2</a></li>
+            <li><a href="#/view3">View3</a></li>
+        </ul>
+    </div>
+</div>
+<div id="main" ng-view></div>
+<div id="footer">&copy; Lucas van Heerikhuizen, 2016</div>
+
+<script>
+
+    angular.module('routingApp', ['ngRoute'])
+		.directive('loginScreen', function(){
+			return {
+				templateUrl: 'login.html',
+				restrict: 'E'
+			};
+		})
+		.config(['$routeProvider', function($routeProvider) {
+		
+			$routeProvider.when('/', {
+				template: "<h1>Welkom op Luke's User Management System</h1>"
+			})
+			.when('/users', {
+				templateUrl: "users.html"
+			})
+			.when('/adduser', {
+				templateUrl: "adduser.html"
+			})
+			.when('/edituser/:userId', {
+				templateUrl: "edituser.html",
+				controller: ['$routeParams', function($routeParams){
+					this.userId = $routeParams.userId;
+					this.qStr = $routeParams.q;
+					this.userEdit = {};
+				}],
+				controllerAs: 'userCtrl'				
+			})
+			.when('/user/:userId', {
+				templateUrl: "user.html",
+				controller: ['$routeParams', function($routeParams){
+					this.userId = $routeParams.userId;
+					this.qStr = $routeParams.q;
+				}],
+				controllerAs: 'userCtrl'
+			})
+			.when('/view2', {
+				template: "<h2>Dit is view2</h2>"
+			})
+			.when('/view3', {
+				template: "<h2>Dit is view3</h2>"
+			})
+			.otherwise({redirectTo: '/'});
+		
+		}])
+		.controller('myCtrl', ['$scope', '$location', function($scope, $location){
+			self = this;
+			self.userLoggedIn = false;
+			self.loginName = "";
+			self.passWord = "";
+			self.showWarning = false;
+			self.newUser = {};
+			
+			self.users = [  {naam: "Piet", leeftijd: 16, geslacht: "man", lievelingsdier: "hond"},
+							{naam: "Anne", leeftijd: 53, geslacht: "vrouw", lievelingsdier: "kat"},
+							{naam: "Klaas", leeftijd: 25, geslacht: "man", lievelingsdier: "kat"},
+							{naam: "Eva", leeftijd: 36, geslacht: "vrouw", lievelingsdier: "hond"},
+							{naam: "Dirk", leeftijd: 25, geslacht: "man", lievelingsdier: "eend"},
+							{naam: "Simon", leeftijd: 27, geslacht: "man", lievelingsdier: "varken"},
+							{naam: "Janneke", leeftijd: 74, geslacht: "vrouw", lievelingsdier: "schaap"} ];
+							
+			self.submitLogin = function(){
+				if(self.loginName == "Lucas" && self.passWord == "pass")
+					self.userLoggedIn = true;
+				else
+					self.showWarning = true;
+			};
+			
+			self.userLogout = function(){
+				self.userLoggedIn = false;
+			};
+			
+			self.voegUserToe = function(){
+				self.users.push(self.newUser);
+  				$location.path( '/users' );
+				self.newUser = {};
+			}
+			
+			self.pasUserAan = function(userEdit, userId){
+				self.users[userId].naam = userEdit.naam;
+				self.users[userId].leeftijd = userEdit.leeftijd;
+				self.users[userId].geslacht = userEdit.geslacht;
+				self.users[userId].lievelingsdier = userEdit.lievelingsdier;
+ 				$location.path( '/users' );
+			};
+			
+			/* Function to redirect on button click */
+			$scope.go = function ( path ) {
+  				$location.path( path );
+			};
+			
+		}]);
+
+</script>
+
+</body>
+</html>
