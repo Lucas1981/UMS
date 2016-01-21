@@ -5,10 +5,12 @@
     	<td>Naam</td>
         <td>Leeftijd</td>
         <td>Geslacht</td>
+        
     </tr>
-	<tr ng-repeat="user in ctrl.users">
-    	<td><a href="#/user/{{$index}}">{{user.naam}}</a></td>
+	<tr ng-repeat="user in ctrl.users | filter: { status: 'actief' }">
+    	<td><a href="#/user/{{user.id}}">{{user.naam}}</a></td>
         <td>{{user.leeftijd}}</td>
         <td>{{user.geslacht}}</td>
+        <td><a href="" ng-click="ctrl.deleteItem(user.id)"><i class="fa fa-trash"></i></a></td>
     </tr>
 </table>

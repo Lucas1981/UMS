@@ -1,6 +1,27 @@
 <h2>Details voor user</h2>
-<p>Naam: {{ctrl.users[userCtrl.userId].naam}}</p>
-<p>Leeftijd: {{ctrl.users[userCtrl.userId].leeftijd}}</p>
-<p>Geslacht: {{ctrl.users[userCtrl.userId].geslacht}}</p>
-<p>Lievelingsdier: {{ctrl.users[userCtrl.userId].lievelingsdier}}</p>
-<p><button type="button" class="btn btn-primary" ng-click="go('/edituser/' + userCtrl.userId)">Pas user aan</button></p>
+<p class="userViewStrip">Naam:
+	<span ng-show="ctrl.editMode == false">{{ctrl.users[userCtrl.userId].naam}}</span>
+	<span ng-show="ctrl.editMode == true"><input ng-model="ctrl.userEdit.naam" type="textarea" /></span>
+</p>
+<p class="userViewStrip">Leeftijd: 
+    <span ng-show="ctrl.editMode == false">{{ctrl.users[userCtrl.userId].leeftijd}}</span>
+	<span ng-show="ctrl.editMode == true"><input ng-model="ctrl.userEdit.leeftijd" type="textarea" /></span>
+</p>
+<p class="userViewStrip">Geslacht: 
+    <span ng-show="ctrl.editMode == false">{{ctrl.users[userCtrl.userId].geslacht}}</span>
+	<span ng-show="ctrl.editMode == true"><input ng-model="ctrl.userEdit.geslacht" type="textarea" /></span>
+</p>
+<p class="userViewStrip">Lievelingsdier: 
+    <span ng-show="ctrl.editMode == false">{{ctrl.users[userCtrl.userId].lievelingsdier}}</span>
+	<span ng-show="ctrl.editMode == true"><input ng-model="ctrl.userEdit.lievelingsdier" type="textarea" /></span>
+</p>
+<p>
+	<span ng-show="ctrl.editMode == false">
+    	<button type="button" class="btn btn-primary" ng-click="ctrl.enableEditMode(userCtrl.userId)">Pas user aan</button>
+	</span>
+    <span ng-show="ctrl.editMode == true">
+        <button type="button" class="btn btn-primary" ng-click="ctrl.pasUserAan(userCtrl.userId)">Sla aanpassingen op</button>
+        <button type="button" class="btn btn-primary" ng-click="ctrl.cancelEditUser()">Annuleren</button>
+	</span>
+    <button type="button" class="btn btn-danger" ng-click="ctrl.deleteItem(userCtrl.userId);go( '/users' )">User verwijderen</button>
+</p>	
